@@ -1,0 +1,164 @@
+name: FastAPI Project Setup
+description: Setup steps for the FastAPI demo project with GitHub Copilot
+
+steps:
+  - step: 1
+    title: Clone the Repository
+    description: Clone the repository to your local machine
+    command: git clone https://github.com/mc5eamus/agentic-ghc-demo-02.git
+    
+  - step: 2
+    title: Navigate to Project Directory
+    description: Change to the project directory
+    command: cd agentic-ghc-demo-02
+    
+  - step: 3
+    title: Create Virtual Environment
+    description: Create a Python virtual environment for isolated dependencies
+    commands:
+      - python -m venv venv
+      - source venv/bin/activate  # On Windows use: venv\Scripts\activate
+    
+  - step: 4
+    title: Install Dependencies
+    description: Install all required Python packages
+    command: pip install -r requirements.txt
+    
+  - step: 5
+    title: Install Development Dependencies
+    description: Install development tools for testing and linting
+    command: pip install -e ".[dev]"
+    optional: true
+    
+  - step: 6
+    title: Verify Installation
+    description: Check that FastAPI and uvicorn are installed correctly
+    command: python -c "import fastapi; import uvicorn; print('Installation successful!')"
+    
+  - step: 7
+    title: Run the Application
+    description: Start the FastAPI development server
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    notes:
+      - The API will be available at http://localhost:8000
+      - Interactive API docs available at http://localhost:8000/docs
+      - Alternative docs available at http://localhost:8000/redoc
+    
+  - step: 8
+    title: Run Tests
+    description: Execute the test suite to verify everything works
+    command: pytest
+    notes:
+      - Run with coverage: pytest --cov=app tests/
+      - Run specific test file: pytest tests/test_main.py
+      - Run with verbose output: pytest -v
+    
+  - step: 9
+    title: Run Linter
+    description: Check code quality with Ruff
+    command: ruff check .
+    optional: true
+    notes:
+      - Auto-fix issues: ruff check --fix .
+      - Format code: ruff format .
+    
+  - step: 10
+    title: Access API Documentation
+    description: Open the interactive API documentation in your browser
+    urls:
+      - http://localhost:8000/docs (Swagger UI)
+      - http://localhost:8000/redoc (ReDoc)
+
+environment_variables:
+  - name: PYTHONPATH
+    description: Add project root to Python path if needed
+    value: .
+    optional: true
+
+development_workflow:
+  - task: Adding a New Endpoint
+    steps:
+      - Define the endpoint in app/main.py or create a new router
+      - Add request/response Pydantic models if needed
+      - Write tests in tests/ directory
+      - Run tests to verify functionality
+      - Update API documentation if necessary
+      
+  - task: Running Tests During Development
+    steps:
+      - Run pytest in watch mode (requires pytest-watch)
+      - Or run pytest after each change
+      - Check test coverage regularly
+      
+  - task: Before Committing Code
+    steps:
+      - Run pytest to ensure all tests pass
+      - Run ruff check . to check for linting issues
+      - Run ruff format . to format code consistently
+      - Review changes with git diff
+
+troubleshooting:
+  - issue: Import errors when running the application
+    solution: Ensure virtual environment is activated and dependencies are installed
+    
+  - issue: Tests fail with ModuleNotFoundError
+    solution: Run tests from project root directory or set PYTHONPATH
+    
+  - issue: Port 8000 already in use
+    solution: Use a different port with --port flag or stop other services using port 8000
+    
+  - issue: Linter/formatter not found
+    solution: Install dev dependencies with pip install -e ".[dev]"
+
+useful_commands:
+  development:
+    - command: uvicorn app.main:app --reload
+      description: Run development server with auto-reload
+      
+  testing:
+    - command: pytest -v
+      description: Run tests with verbose output
+    - command: pytest --cov=app --cov-report=html
+      description: Run tests with HTML coverage report
+    - command: pytest -k "test_name"
+      description: Run specific test by name
+      
+  code_quality:
+    - command: ruff check .
+      description: Check code for issues
+    - command: ruff check --fix .
+      description: Auto-fix code issues
+    - command: ruff format .
+      description: Format code consistently
+      
+  utilities:
+    - command: pip freeze > requirements.txt
+      description: Update requirements file
+    - command: pip list
+      description: List installed packages
+
+github_copilot_integration:
+  - feature: Code Completion
+    description: Use Copilot for auto-completing FastAPI endpoints, Pydantic models, and tests
+    
+  - feature: Test Generation
+    description: Write test function signatures and let Copilot suggest test implementations
+    
+  - feature: Documentation
+    description: Start docstrings and let Copilot complete them based on function context
+    
+  - feature: Refactoring
+    description: Use Copilot Chat to explain and refactor complex code sections
+
+resources:
+  - name: FastAPI Documentation
+    url: https://fastapi.tiangolo.com/
+    
+  - name: Pydantic Documentation
+    url: https://docs.pydantic.dev/
+    
+  - name: Pytest Documentation
+    url: https://docs.pytest.org/
+    
+  - name: Ruff Documentation
+    url: https://docs.astral.sh/ruff/
